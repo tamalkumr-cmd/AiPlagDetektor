@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI & Plagiarism Detector</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+<div class="bg-grid"></div>
+
+<div class="container">
+
+    <div class="header">
+        <h1>AI TEXT DETECTOR</h1>
+        <p class="subtitle">Pattern analysis • Linguistic signals</p>
+    </div>
+
+    <!-- AI DETECTOR -->
+    <div class="panel">
+        <textarea id="textInput" placeholder="Paste or type text here..."></textarea>
+        <input type="file" id="fileInput" accept=".txt,.pdf,.docx">
+        <button id="detectBtn">SCAN TEXT</button>
+    </div>
+
+    <div class="card">
+        <h2>ANALYSIS RESULT</h2>
+        <div id="output" class="output">Awaiting input...</div>
+    </div>
+
+    <!-- TEXT PLAGIARISM -->
+    <div class="panel">
+        <h2>PLAGIARISM CHECK</h2>
+        <div class="dual-area">
+            <textarea id="text1" placeholder="Original text..."></textarea>
+            <textarea id="text2" placeholder="Text to compare..."></textarea>
+        </div>
+        <button id="simBtn" class="sim-btn">CHECK SIMILARITY</button>
+    </div>
+
+    <div class="card sim-card">
+        <h2>SIMILARITY RESULT</h2>
+        <div id="simOutput">Awaiting input...</div>
+    </div>
+
+    <!-- INTERNET CHECK -->
+    <div class="panel">
+        <h2>INTERNET PLAGIARISM SCAN</h2>
+        <textarea id="netText" placeholder="Paste text to scan the internet..."></textarea>
+        <button id="netBtn" class="sim-btn">SCAN INTERNET</button>
+    </div>
+
+    <div class="card sim-card">
+        <h2>WEB MATCH RESULTS</h2>
+        <div id="netOutput">Awaiting input...</div>
+    </div>
+
+</div>
+
+<script>
+document.getElementById("detectBtn").onclick = () => {
+    const text = document.getElementById("textInput").value;
+    const file = document.getElementById("fileInput").files[0];
+    const out = document.getElementById("output");
+
+    out.innerText = "Analyzing...";
+
+    const form = new FormData();
+    form.append("text", text);
+    if (file) form.append("file", file);
+
+    fetch("/detect", { method: "POST", body: form })
+        .then(r => r.json())
+        .then(d => {
+            if (d.error) { out.innerText = d.error; return; }
+            out.innerHTML = `
+                <div class="result-row"><span>AI Probability</span><span>${d.ai_probability}</span></div>
+                <div class="result-row"><span>Perplexity</span><span>${d.perplexity}</span></div>
+                <div class="result-row"><span>Repetition</span><span>${d.repetition_score}</span></div>
+                <div class="result-row"><span>Sentence Variance</span><span>${d.sentence_variance}</span></div>
+            `;
+        });
+};
+
+document.getElementById("simBtn").onclick = () => {
+    const form = new FormData();
+    form.append("text1", text1.value);
+    form.append("text2", text2.value);
+
+    simOutput.innerText = "Comparing...";
+
+    fetch("/similarity", { method: "POST", body: form })
+        .then(r => r.json())
+        .then(d => {
+            if (d.error) { simOutput.innerText = d.error; return; }
+            simOutput.innerHTML = `
+                <div class="result-row"><span>Similarity</span><span>${d.similarity_percent}%</span></div>
+                <div class="result-row"><span>Status</span><span>${d.label}</span></div>
+            `;
+        });
+};
+
+document.getElementById("netBtn").onclick = () => {
+    const form = new FormData();
+    form.append("text", netText.value);
+
+    netOutput.innerText = "Searching internet...";
+
+    fetch("/internet_check", { method: "POST", body: form })
+        .then(r => r.json())
+        .then(d => {
+            if (d.error) { netOutput.innerText = d.error; return; }
+            let html = `<div class="result-row"><span>Highest Match</span><span>${d.overall_match}%</span></div>`;
+            d.sources.forEach(s => {
+                html += `<div class="result-row"><span>${s.match}%</span><span><a href="${s.url}" target="_blank">View</a></span></div>`;
+            });
+            netOutput.innerHTML = html;
+        });
+};
+</script>
+</body>
+</html>

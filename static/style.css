@@ -1,0 +1,131 @@
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #0a0a0a;
+    color: #e5e5e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+}
+
+.container {
+    width: 100%;
+    max-width: 760px;
+    padding: 24px;
+    z-index: 1;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.header h1 {
+    font-size: 2.4rem;
+    margin: 0;
+    letter-spacing: 0.15em;
+}
+
+.subtitle {
+    opacity: 0.7;
+    margin-top: 8px;
+    font-size: 0.95rem;
+}
+
+.panel {
+    background: rgba(20, 20, 20, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 160px;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: #0f0f0f;
+    color: #f0f0f0;
+    font-size: 1rem;
+    resize: vertical;
+}
+
+button {
+    margin-top: 18px;
+    width: 100%;
+    padding: 14px;
+    border-radius: 999px;
+    border: 1px solid #ffffff;
+    background: #ffffff;
+    color: #0a0a0a;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.card {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 16px;
+    background: rgba(18, 18, 18, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card h2 {
+    margin: 0 0 12px 0;
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+}
+
+.output {
+    opacity: 0.9;
+}
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.result-row:last-child {
+    border-bottom: none;
+}
+.dual-area {
+    display: flex;
+    gap: 12px;
+}
+
+.dual-area textarea {
+    min-height: 140px;
+}
+
+.sim-btn {
+    margin-top: 14px;
+}
+
+.sim-card {
+    margin-top: 20px;
+}
